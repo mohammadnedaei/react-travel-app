@@ -1,0 +1,28 @@
+name: Deploy to DirectAdmin
+
+on:
+  push:
+    branches:
+      - main  # Replace 'main' with your branch name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run dev
+          
+      - name: Deploy to DirectAdmin
+        uses: easingthemes/deploy-to-directadmin@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          source: build/  # Replace 'build/' with your build directory
+          dest: public_html/  # Replace 'public_html/' with your web directory
